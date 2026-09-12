@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('cislo_licence', 48)->nullable();
             $table->date('platnost_lic_od')->nullable();
             $table->date('platnost_lic_do')->nullable();
-            $table->date('platnost_jr_od');
+            $table->date('platnost_jr_od')->nullable();
             $table->date('platnost_jr_do')->nullable();
 
             $table->primary(['cislo_linky', 'rozliseni_linky']);
