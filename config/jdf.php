@@ -75,6 +75,11 @@ return [
                 'platnost_lic_od', 'platnost_lic_do', 'platnost_jr_od', 'platnost_jr_do',
                 'rozliseni_dopravce', 'rozliseni_linky',
             ],
+            // Real-world JDF 1.11 Linky.txt has one extra (unidentified, always empty
+            // in samples seen so far) field between platnost_lic_do and platnost_jr_od
+            // — 0-indexed position 12. Without dropping it precisely, every field after
+            // it shifts by one, corrupting rozliseni_dopravce/rozliseni_linky silently.
+            'drop_indexes' => [12],
             'casts' => [
                 'cislo_linky' => 'int', 'rozliseni_dopravce' => 'int', 'rozliseni_linky' => 'int',
                 'objizdkovy_jr' => 'bool01', 'seskupeni_spoju' => 'bool01', 'pouziti_oznacniku' => 'bool01',
@@ -126,6 +131,14 @@ return [
                 'cislo_stanoviste', 'pev_kod_1', 'pev_kod_2', 'kilometry', 'cas_prijezdu', 'cas_odjezdu',
                 'rozliseni_linky',
             ],
+            // Confirmed against real ZasSpoje.txt (15 fields/row): one unidentified,
+            // always-empty extra field sits between pev_kod_2 and kilometry (0-indexed
+            // position 8), and two more trail after cas_odjezdu, before rozliseni_linky
+            // (positions 12, 13). Dropping only the end fields (as a naive fix would)
+            // corrupts everything from kilometry onward — confirmed by cross-checking
+            // real rows against the matching ZasLinky.txt tariff sequence and its
+            // known departure-time progression.
+            'drop_indexes' => [8, 12, 13],
             'casts' => [
                 'cislo_linky' => 'int', 'cislo_spoje' => 'int', 'cislo_tarifni' => 'int',
                 'cislo_zastavky' => 'int', 'kod_oznacniku' => 'int', 'rozliseni_linky' => 'int',

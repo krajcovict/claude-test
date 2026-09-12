@@ -16,11 +16,11 @@ class JdfTime extends Component
 
     public function __construct(?string $value = null)
     {
-        [$this->label, $this->variant] = $this->resolve($value);
+        [$this->label, $this->variant] = $this->resolveLabel($value);
     }
 
     /** @return array{0: string, 1: string} */
-    private function resolve(?string $value): array
+    private function resolveLabel(?string $value): array
     {
         if ($value === null || $value === '') {
             return ['—', 'empty'];

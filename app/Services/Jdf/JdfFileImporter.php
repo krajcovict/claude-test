@@ -52,6 +52,28 @@ class JdfFileImporter
             }
 
             $total++;
+
+            // Some JDF 1.11 files insert extra columns in the MIDDLE of the row, not
+            // just at the end — for `linky` specifically, real-world data has one
+            // extra field between platnost_lic_do and platnost_jr_od. Blindly
+            // truncating from the end (as below) would silently misalign every field
+            // after the insertion point, corrupting values like rozliseni_linky
+            // without any error — exactly what caused a real FK failure here. Where
+            // the extra field's position is known, drop it precisely instead.
+            $dropIndexes = $definition['drop_indexes'] ?? [];
+
+            if ($dropIndexes !== [] && count($fields) === count($columns) + count($dropIndexes)) {
+                foreach (array_reverse(array_unique($dropIndexes)) as $index) {
+                    if (array_key_exists($index, $fields)) {
+                        array_splice($fields, $index, 1);
+                    }
+                }
+
+                if (! isset($warnings['dropped_known_extra_field'])) {
+                    $warnings['dropped_known_extra_field'] = 'Riadky obsahovali známe dodatočné pole novšej verzie JDF na očakávanej pozícii — bolo odstránené pred mapovaním na stĺpce.';
+                }
+            }
+
             $expected = count($columns);
             $actual = count($fields);
 
@@ -62,7 +84,7 @@ class JdfFileImporter
                 $fields = array_slice($fields, 0, $expected);
 
                 if (! isset($warnings['extra_fields'])) {
-                    $warnings['extra_fields'] = "Riadky majú viac polí ({$actual}) než sa očakávalo ({$expected}) — nadbytočné polia boli ignorované (pravdepodobne novšia verzia JDF).";
+                    $warnings['extra_fields'] = "Riadky majú viac polí ({$actual}) než sa očakávalo ({$expected}) — nadbytočné polia boli ignorované (pravdepodobne novšia verzia JDF). Ak sú dáta po importe nesprávne posunuté, pole môže byť v strede riadku, nie na konci — kontaktujte podporu s ukážkou riadku.";
                 }
             } elseif ($actual < $expected) {
                 $fields = array_pad($fields, $expected, '');

@@ -105,6 +105,25 @@
         margin-bottom: 1.5rem;
         font-size: 0.9rem;
     }
+
+    .selected-files {
+        list-style: none;
+        margin: 0.6rem 0 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .selected-files li {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.78rem;
+        background: var(--paper);
+        border: 1px solid var(--rule);
+        border-radius: 999px;
+        padding: 0.2rem 0.7rem;
+        color: var(--ink-soft);
+    }
 </style>
 @endpush
 
@@ -193,9 +212,32 @@
                 @csrf
 
                 <div class="field-row">
-                    <input type="file" name="files[]" multiple accept=".txt">
+                    <input type="file" name="files[]" multiple accept=".txt" id="jdf-files">
+                    <ul id="jdf-selected-files" class="selected-files"></ul>
                 </div>
 
+                <script>
+                    // Native multi-file inputs REPLACE the previous selection every time you
+                    // reopen the dialog — they don't accumulate. This just makes that visible
+                    // before you submit, since silently missing a file (e.g. Dopravci.txt)
+                    // causes a downstream foreign-key error that's easy to misread.
+                    document.getElementById('jdf-files').addEventListener('change', function (e) {
+                        const list = document.getElementById('jdf-selected-files');
+                        list.innerHTML = '';
+
+                        if (e.target.files.length === 0) {
+                            return;
+                        }
+
+                        Array.from(e.target.files)
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .forEach(file => {
+                                const li = document.createElement('li');
+                                li.textContent = file.name;
+                                list.appendChild(li);
+                            });
+                    });
+                </script>
                 <div class="checkbox-row">
                     <input type="checkbox" id="replace" name="replace" value="1" checked>
                     <label for="replace">
