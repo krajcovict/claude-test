@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
@@ -159,3 +163,26 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - After the feature tests pass, ask the user to run the complete suite with `php artisan test --compact`.
 
 </laravel-boost-guidelines>
+
+## Project State
+
+This is a stock, unmodified Laravel 13 skeleton (`laravel/laravel`) on PHP 8.4. No custom domain code exists yet beyond the framework defaults — `app/Models/User.php`, `app/Http/Controllers/Controller.php`, `app/Providers/AppServiceProvider.php`, the three default migrations (users, cache, jobs), and the default `/` welcome route. Treat any "architecture" as not yet established; follow the Laravel Boost conventions above when adding the first real features.
+
+## Commands
+
+- Install deps + bootstrap: `composer install && npm install`
+- First-time setup (copies `.env`, generates key, migrates, builds assets): `composer run setup`
+- Local dev (serves app, queue listener, Pail log tailing, and Vite together via `php artisan dev`): `composer run dev`
+- Frontend build: `npm run build` — Frontend dev/watch: `npm run dev`
+- Run full test suite: `php artisan test --compact` (also runnable via `composer test`, which clears config first)
+- Run a single test file: `php artisan test --compact tests/Feature/ExampleTest.php`
+- Run tests by name filter: `php artisan test --compact --filter=testName`
+- Run tests via Pest directly: `vendor/bin/pest` (accepts the same path/`--filter` args)
+- Format PHP after edits: `vendor/bin/pint --dirty --format agent`
+
+## Stack Notes
+
+- DB: SQLite by default (`DB_CONNECTION=sqlite`); tests run against an in-memory SQLite DB with array/sync drivers for cache, session, queue, and mail (see `phpunit.xml`).
+- Frontend build tooling: Vite + `laravel-vite-plugin` + Tailwind CSS v4 (`@tailwindcss/vite`), no JS framework installed — see `vite.config.js`.
+- Test framework: Pest (with `pestphp/pest-plugin-laravel`), config in `tests/Pest.php`.
+- Laravel Boost (`laravel/boost`) is installed as a dev dependency, providing the MCP server in `.mcp.json` and the guidelines block above; `composer post-update-cmd` runs `php artisan boost:update`, which regenerates the `<laravel-boost-guidelines>` block in place — add project-specific notes outside that block (as below), not inside it.
