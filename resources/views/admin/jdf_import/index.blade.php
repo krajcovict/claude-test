@@ -12,7 +12,7 @@
     }
 
     .status-card {
-        background: #fff;
+        background: var(--surface);
         border: 1px solid var(--rule);
         border-radius: var(--radius);
         padding: 0.85rem 1rem;
@@ -32,7 +32,7 @@
     .status-card--empty .status-card__count { color: var(--rule); }
 
     .panel {
-        background: #fff;
+        background: var(--surface);
         border: 1px solid var(--rule);
         border-radius: var(--radius);
         padding: 1.5rem;
@@ -72,7 +72,7 @@
         cursor: pointer;
     }
 
-    .btn:hover { background: #1c3e70; }
+    .btn:hover { background: var(--board-hover); }
 
     .hint { color: var(--ink-soft); font-size: 0.85rem; }
 
@@ -92,13 +92,13 @@
 
     .num { font-family: 'IBM Plex Mono', monospace; text-align: right; }
 
-    .badge-ok { color: #2E7D32; font-weight: 600; }
+    .badge-ok { color: var(--ok); font-weight: 600; }
     .badge-warn { color: var(--reroute); font-weight: 600; }
 
     .warning-list { margin: 0.25rem 0 0; padding-left: 1.1rem; color: var(--ink-soft); font-size: 0.82rem; }
 
     .alert {
-        background: #FBEFC0;
+        background: var(--alert-bg);
         border: 1px solid var(--weekday);
         border-radius: var(--radius);
         padding: 0.85rem 1rem;

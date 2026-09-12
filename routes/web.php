@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LinkaTimetableController;
 use App\Http\Controllers\Admin\JdfImportController;
+use App\Http\Controllers\LinkaTimetableController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->name('home');
 
 Route::get('/linky', [LinkaTimetableController::class, 'index'])->name('linky.index');
 Route::get('/linky/{cisloLinky}/{rozliseniLinky}', [LinkaTimetableController::class, 'show'])->name('linky.show');

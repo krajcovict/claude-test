@@ -125,7 +125,7 @@
         font-size: 0.85rem;
     }
 
-    .day-filter a:hover { background: rgba(20, 49, 94, 0.08); }
+    .day-filter a:hover { background: var(--hover-tint); }
 
     .day-filter a.is-active {
         background: var(--weekday);

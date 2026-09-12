@@ -21,7 +21,7 @@
         transition: background 120ms ease;
     }
 
-    .line-row:hover { background: rgba(16, 36, 63, 0.05); }
+    .line-row:hover { background: var(--hover-tint); }
 
     .shield {
         background: var(--weekday);
