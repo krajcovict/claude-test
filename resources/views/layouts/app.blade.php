@@ -84,7 +84,7 @@
             background: var(--surface);
             color: var(--ink);
             border: 1px solid var(--rule);
-            border-radius: 999px;
+            border-radius: var(--radius);
             padding: 0.4rem 0.9rem;
             font-family: 'Work Sans', sans-serif;
             font-size: 0.8rem;
